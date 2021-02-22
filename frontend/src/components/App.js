@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
 import Recipes from "./Recipes";
+import { postRecipe, getRecipes } from "../actions/actions";
 
 class App extends Component {
   state = {
@@ -8,6 +9,17 @@ class App extends Component {
     description: "",
     image: null,
   };
+  inputRef = React.createRef();
+
+  componentDidMount() {
+    this.props.getRecipes();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.isPosting === true && nextProps.isPosting === false) {
+      this.props.fetchMessages();
+    }
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -24,21 +36,20 @@ class App extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     console.log(this.state);
-    let form_data = new FormData();
-    form_data.append("image", this.state.image, this.state.image.name);
-    form_data.append("name", this.state.name);
-    form_data.append("description", this.state.description);
-    let url = "http://localhost:8000/api/recipe/";
-    axios
-      .post(url, form_data, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
+    if (this.state.name.trim() !== "" && this.state.description.trim() !== "") {
+      let form_data = new FormData();
+      form_data.append("image", this.state.image, this.state.image.name);
+      form_data.append("name", this.state.name);
+      form_data.append("description", this.state.description);
+      this.props.postRecipe(form_data);
+      this.setState({
+        name: "",
+        description: "",
+      });
+      this.inputRef.current.value = "";
+    } else {
+      alert("Name or Description shouldn't be empty or only with whitespaces");
+    }
   };
 
   render() {
@@ -71,15 +82,25 @@ class App extends Component {
               id="image"
               accept="image/png, image/jpeg"
               onChange={this.handleImageChange}
+              ref={this.inputRef}
               required
             />
           </p>
           <input type="submit" />
         </form>
-        <Recipes />
+        <Recipes recipes={this.props.recipes} />
       </div>
     );
   }
 }
-
-export default App;
+function mapStateToProps(state) {
+  return {
+    recipes: state.recipes,
+    needUpdate: state.needUpdate,
+  };
+}
+const mapDispatchToProps = (dispatch) => ({
+  getRecipes: () => dispatch(getRecipes()),
+  postRecipe: (form) => dispatch(postRecipe(form)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(App);
