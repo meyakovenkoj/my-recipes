@@ -15,7 +15,7 @@ class RecipeView(APIView):
 
     def get(self, request):
         Recipes = list(Recipe.objects.all().values())
-
+        # print(Recipes)
         if Recipes != []:
             return Response({"Recipes": Recipes}, status=status.HTTP_200_OK)
         else:
@@ -24,8 +24,10 @@ class RecipeView(APIView):
     def post(self, request):
         serializer = RecipeSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            data = serializer.save()
+            # [{'id': data.id, 'name': data.name, 'description': data.description, 'image': str(data.image)}]
+            # print([data.id, data.name, data.description, str(data.image)])
+            return Response({"Recipes": {'id': data.id, 'name': data.name, 'description': data.description, 'image': str(data.image)}}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
