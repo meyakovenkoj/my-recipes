@@ -1,0 +1,7 @@
+<h1>Django Image Uploading</h1>
+<ul>
+  {% for recipe in object_list %}
+    <h2>{{ recipe.name }}</h2>
+    <img src="{{ recipe.image.url}}" alt="{{ recipe.name }}">
+  {% endfor %}
+</ul>
