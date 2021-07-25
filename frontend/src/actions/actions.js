@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-export const url =
-  window.location.protocol + '//' + window.location.hostname + ':8000'
+export const url = window.location.protocol + '//' + window.location.hostname
 
 export function getRecipes(form_data) {
   return (dispatch) => {
