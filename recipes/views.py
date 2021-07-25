@@ -25,9 +25,10 @@ class RecipeView(APIView):
         serializer = RecipeSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.save()
+            item = list(Recipe.objects.all().filter(id=data.id).values())
             # [{'id': data.id, 'name': data.name, 'description': data.description, 'image': str(data.image)}]
             # print([data.id, data.name, data.description, str(data.image)])
-            return Response({"Recipes": {'id': data.id, 'name': data.name, 'description': data.description, 'image': str(data.image)}}, status=status.HTTP_201_CREATED)
+            return Response({"Recipes": item}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
@@ -36,7 +37,10 @@ class RecipeView(APIView):
         if id != None:
             id = int(id)
             item = Recipe.objects.all().filter(id=id)
-            item.delete()
+            try:
+                item.delete()
+            except:
+                return Response(status=status.HTTP_409_CONFLICT)
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)

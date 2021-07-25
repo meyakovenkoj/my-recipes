@@ -35,7 +35,9 @@ SECRET_KEY = '14*t_yt9_=j8!-cgj%mmqxwuobcaab+y6vem9j9&4or9@*vuxk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*'
+]
 
 
 # Application definition
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
     'recipes.apps.RecipesConfig',
     'rest_framework',
     'corsheaders',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
@@ -63,10 +66,11 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
+    'http://192.168.1.130'
 )
 
 ROOT_URLCONF = 'backend.urls'
