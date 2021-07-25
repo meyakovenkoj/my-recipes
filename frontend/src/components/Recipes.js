@@ -1,49 +1,42 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { connect } from "react-redux";
-import { deleteRecipe } from "../actions/actions";
-
+import React, { Component } from 'react'
+import axios from 'axios'
+import { connect } from 'react-redux'
+import { deleteRecipe } from '../actions/actions'
+import RecipeReviewCard from './Card.js'
+import Grid from '@material-ui/core/Grid'
 class Recipes extends Component {
   handleDelete(itemId) {
-    this.props.deleteRecipe(itemId);
+    this.props.deleteRecipe(itemId)
   }
 
   render() {
-    console.log(this.props.recipes);
+    // console.log(this.props.recipes.recipes)
     return (
       <div className="Recipes">
-        <ul>
-          {this.props.recipes.recipes?.map((recipe) => {
+        <Grid
+          container
+          spacing={2}
+          direction="row"
+          justify="flex-start"
+          alignItems="flex-start"
+        >
+          {this.props.recipes.recipes.map((recipe) => {
             return (
-              <div key={recipe.id}>
-                <li>
-                  <p>
-                    {recipe.name} - {recipe.description}
-                  </p>
-                  <button
-                    onClick={() => {
-                      this.handleDelete(recipe.id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </li>
-                <img
-                  src={"http://localhost:8000/media/" + recipe.image}
-                  width="350"
-                  height="250"
-                  alt=""
+              <Grid item xs={12} sm={6} md={3} key={recipe.id}>
+                <RecipeReviewCard
+                  recipe={recipe}
+                  deleteRecipe={this.props.deleteRecipe}
                 />
-              </div>
-            );
+              </Grid>
+            )
           })}
-        </ul>
+        </Grid>
       </div>
-    );
+    )
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   deleteRecipe: (id) => dispatch(deleteRecipe(id)),
-});
-export default connect(null, mapDispatchToProps)(Recipes);
+})
+export default connect(null, mapDispatchToProps)(Recipes)
