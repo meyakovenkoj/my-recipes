@@ -12,12 +12,12 @@ class Recipes extends Component {
   render() {
     // console.log(this.props.recipes.recipes)
     return (
-      <div className="Recipes">
+      <div style={{ padding: 20 }}>
         <Grid
           container
           spacing={2}
           direction="row"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="flex-start"
         >
           {this.props.recipes.recipes.map((recipe) => {

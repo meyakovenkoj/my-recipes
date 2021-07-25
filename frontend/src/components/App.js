@@ -14,6 +14,8 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Preview from './Preview'
+import PhotoCamera from '@material-ui/icons/PhotoCamera'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const styles = (theme) => ({
   fab: {
@@ -74,6 +76,7 @@ class App extends Component {
       name: '',
       description: '',
       image: null,
+      recipeDetails: '',
       preview: null,
       open: false,
     })
@@ -87,12 +90,15 @@ class App extends Component {
       form_data.append('image', this.state.image, this.state.image.name)
       form_data.append('name', this.state.name)
       form_data.append('description', this.state.description)
+      form_data.append('recipeDetails', this.state.recipeDetails)
       form_data.append('created_at', this.state.created_at)
       this.props.postRecipe(form_data)
       this.setState({
         name: '',
         description: '',
+        recipeDetails: '',
         image: null,
+        preview: null,
         open: false,
       })
       this.inputRef.current.value = ''
@@ -106,14 +112,16 @@ class App extends Component {
     return (
       <div className="App">
         <Recipes recipes={this.props.recipes} />
-        <Fab
-          color="primary"
-          aria-label="add"
-          className={classes.fab}
-          onClick={this.handleClickOpen}
-        >
-          <AddIcon />
-        </Fab>
+        <Tooltip title="Add" aria-label="add">
+          <Fab
+            color="primary"
+            aria-label="add"
+            className={classes.fab}
+            onClick={this.handleClickOpen}
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -147,6 +155,15 @@ class App extends Component {
                 />
               </p>
               <p>
+                <TextField
+                  type="text"
+                  placeholder="Recipe"
+                  id="recipeDetails"
+                  value={this.state.recipeDetails}
+                  onChange={this.handleChange}
+                />
+              </p>
+              <p>
                 <input
                   accept="image/png, image/jpeg"
                   className={classes.input}
@@ -156,7 +173,12 @@ class App extends Component {
                   id="image"
                 />
                 <label htmlFor="image">
-                  <Button variant="contained" color="primary" component="span">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component="span"
+                    startIcon={<PhotoCamera />}
+                  >
                     Upload
                   </Button>
                 </label>
