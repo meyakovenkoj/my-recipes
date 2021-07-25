@@ -22,6 +22,11 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = Path(BASE_DIR, 'static')
 
+STATICFILES_DIRS = (
+    Path(BASE_DIR, 'frontend', 'build', 'static'),  # update the STATICFILES_DIRS
+    Path(STATIC_ROOT, 'static'),
+    )
+
 MEDIA_ROOT = Path(STATIC_ROOT, 'media')
 
 MEDIA_URL = '/media/'
@@ -78,7 +83,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [Path(BASE_DIR, 'frontend')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
