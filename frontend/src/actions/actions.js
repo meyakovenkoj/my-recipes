@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const url = window.location.protocol + '//' + window.location.hostname
+export const url = 'http://localhost:8000' //window.location.protocol + '//' + window.location.hostname
 
 export function getRecipes(form_data) {
   return (dispatch) => {
@@ -14,7 +14,7 @@ export function getRecipes(form_data) {
         }
       })
       .catch((err) => {
-        alert(err.response.data.message)
+        alert(err.message)
       })
   }
 }
